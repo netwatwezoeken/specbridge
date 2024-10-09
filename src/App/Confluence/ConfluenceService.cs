@@ -85,7 +85,7 @@ public class ConfluenceService
         var oldBody = await GetPage(pageId);
         if (content == oldBody?.body.storage.value.Replace("&quot;", "\""))
         {
-            Console.WriteLine("No updates for page: " + title);
+            Console.WriteLine("No update: " + title);
             return;
         }
         
@@ -127,5 +127,13 @@ public class ConfluenceService
         var json = await responseString.Content.ReadAsStringAsync();
         var response = JsonSerializer.Deserialize<PageResponse>(json);
         return response;
+    }
+
+    public async Task DeletePage(string pageId, string name, bool recursive = false)
+    {
+        Console.WriteLine("Delete: " + name);
+        var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}";
+
+        var responseString = await _httpClient.DeleteAsync(uri);
     }
 }

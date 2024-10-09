@@ -33,6 +33,8 @@ public class GherkinParser
             }
         }
 
+        var publish = specifications.Feature.Tags.All(t => t.Name != "@no_publish");
+
         foreach (var child in specifications.Feature.Children)
         {
             switch (child)
@@ -46,7 +48,7 @@ public class GherkinParser
             }
         }
         
-        return new ConfluenceDocument(specifications.Feature.Name, contentbuilder.ToString());
+        return new ConfluenceDocument(specifications.Feature.Name, contentbuilder.ToString(), publish);
     }
 
     private void RenderRule(Rule rule, StringBuilder builder)
@@ -107,4 +109,4 @@ public class GherkinParser
     }
 }
 
-public record ConfluenceDocument(string Title, string Content);
+public record ConfluenceDocument(string Title, string Content, bool Publish);

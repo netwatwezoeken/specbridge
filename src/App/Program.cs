@@ -38,7 +38,6 @@ internal static class Program
             Username = opts.User,
             Password = opts.Password
         });
-        var t = await client.GetChildren();
 
         var tree = new FeatureDirectory("root", "", [], []);
         foreach (var path in opts.FeaturePaths)
@@ -126,11 +125,25 @@ internal static class Program
             if (subPages!.results.Any(p => p.title == document.Title))
             {
                 var page = subPages!.results.First(p => p.title == document.Title);
-                await confluenceService.UpdatePage( page.id, document.Title, document.Content);
+                if (document.Publish)
+                {
+                    await confluenceService.UpdatePage(page.id, document.Title, document.Content);
+                }
+                else
+                {
+                    await confluenceService.DeletePage(page.id, document.Title);
+                }
             }
             else
             {
-                await confluenceService.CreatePage(basePage, document.Title, document.Content);
+                if (document.Publish)
+                {
+                    await confluenceService.CreatePage(basePage, document.Title, document.Content);
+                }
+                else
+                {
+                    Console.WriteLine($"Skipping: {document.Title}");
+                }
             }
         }
         
@@ -140,20 +153,27 @@ internal static class Program
             if (subPages!.results.Any(p => p.title == directory.FullName))
             {
                 pageId = subPages!.results.First(p => p.title == directory.FullName).id;
+                if (!directory.Files.Any(f => f.Document.Publish))
+                {
+                    await confluenceService.DeletePage(pageId, directory.FullName, true);
+                }
             }
             else
             {
-                pageId = await CreateFolderPage(directory, confluenceService, basePage);
+                if (directory.Files.Any(f => f.Document.Publish))
+                {
+                    pageId = await CreateFolderPage(directory, confluenceService, basePage);
+                }
+                else
+                {
+                    Console.WriteLine($"Skipping: {directory.FullName}");
+                }
             }
-            await Export(directory, confluenceService, pageId);
-        }
-        
-        var pagesToRemove = subPages!.results.Where(p => workingDir.Files.All(f => f.Document.Title != p.title));
-        pagesToRemove = pagesToRemove!.Where(p => workingDir.Directories.All(f => f.FullName != p.title));
 
-        foreach (var page in pagesToRemove)
-        {
-            Console.WriteLine($"Removing page {page.title}");
+            if (directory.Files.Any(f => f.Document.Publish) || directory.Directories.Any())
+            {
+                await Export(directory, confluenceService, pageId);
+            }
         }
     }
 

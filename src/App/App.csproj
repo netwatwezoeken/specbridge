@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>SpecBridge</AssemblyName>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>SpecBridge</ToolCommandName>
+        <PackageOutputPath>./nupkg</PackageOutputPath>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/netwatwezoeken/specbridge</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/netwatwezoeken/specbridge</RepositoryUrl>
+        <PackageTags>livingdoc</PackageTags>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" />
+        <PackageReference Include="Gherkin" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
+        <None Include="..\..\README.md" Pack="true" PackagePath=""/>
+    </ItemGroup>
+</Project>

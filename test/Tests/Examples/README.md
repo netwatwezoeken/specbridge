@@ -1,0 +1,1 @@
+Example feature files taken from https://github.com/picklesdoc/pickles

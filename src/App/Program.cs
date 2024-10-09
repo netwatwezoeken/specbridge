@@ -76,8 +76,9 @@ internal static class Program
             {
                 fullname = Path.DirectorySeparatorChar + fileInfo.Name;
                 var content = await File.ReadAllTextAsync(fileInfo.FullName);
-                Console.WriteLine($"Adding new file {fileInfo.Name}");
-                currentDirectory.Files.Add(new FeatureFile(fileInfo.Name, fullname, content));
+                using TextReader sr = new StringReader(content);
+                var document = new GherkinParser().ParseToConfluence(sr);
+                currentDirectory.Files.Add(new FeatureFile(fileInfo.Name, fullname, content, document));
                 continue;
             }
             
@@ -96,7 +97,6 @@ internal static class Program
                 {
                     var newDirectory = new FeatureDirectory(name, fullname, [], []);
                     currentDirectory.Directories.Add(newDirectory);
-                    Console.WriteLine($"Adding new directory {newDirectory}");
                 }
 
                 if (name != "")
@@ -108,8 +108,9 @@ internal static class Program
                 {
                     fullname = fullname + Path.DirectorySeparatorChar + fileInfo.Name;
                     var content = await File.ReadAllTextAsync(fileInfo.FullName);
-                    Console.WriteLine($"Adding new file {fileInfo.Name}");
-                    currentDirectory.Files.Add(new FeatureFile(fileInfo.Name, fullname, content));
+                    using TextReader sr = new StringReader(content);
+                    var document = new GherkinParser().ParseToConfluence(sr);
+                    currentDirectory.Files.Add(new FeatureFile(fileInfo.Name, fullname, content, document));
                 }
             }
         }
@@ -120,10 +121,8 @@ internal static class Program
     {
         var subPages = await confluenceService.GetChildren(basePage);
         
-        foreach (var file in workingDir.Files)
+        foreach (var document in workingDir.Files.Select(file => file.Document))
         {
-            using TextReader sr = new StringReader(file.content);
-            var document = new GherkinParser().ParseToConfluence(sr);
             if (subPages!.results.Any(p => p.title == document.Title))
             {
                 var page = subPages!.results.First(p => p.title == document.Title);
@@ -149,7 +148,7 @@ internal static class Program
             await Export(directory, confluenceService, pageId);
         }
         
-        var pagesToRemove = subPages!.results.Where(p => workingDir.Files.All(f => f.FullName != p.title));
+        var pagesToRemove = subPages!.results.Where(p => workingDir.Files.All(f => f.Document.Title != p.title));
         pagesToRemove = pagesToRemove!.Where(p => workingDir.Directories.All(f => f.FullName != p.title));
 
         foreach (var page in pagesToRemove)
@@ -160,7 +159,6 @@ internal static class Program
 
     private static async Task<string> CreateFolderPage(FeatureDirectory directory, ConfluenceService confluenceService, string parentPageId)
     {
-        Console.WriteLine("Create folder: " + directory.Name);
         return await confluenceService.CreatePage(parentPageId, directory.FullName);
     }
     

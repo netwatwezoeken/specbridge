@@ -52,6 +52,7 @@ public class ConfluenceService
     
     public async Task<string> CreatePage(string parentPageId, string title, string content = "")
     {
+        Console.WriteLine("Create page: " + title);
         if(string.IsNullOrEmpty(content))
             content = """
                       <ac:structured-macro ac:name="children" ac:schema-version="2" data-layout="default" ac:local-id="8c8424f8-cd81-4a71-b5c9-58e87d7493fa" ac:macro-id="dfd91e927d85294353d873bf98912e5ddfc60871ec85741ee457556e18e0d1c5">
@@ -79,9 +80,17 @@ public class ConfluenceService
         return response!.id;
     }
 
-    public async Task<string> UpdatePage(string pageId, string title, string content)
+    public async Task UpdatePage(string pageId, string title, string content)
     {
-        var currentVersion = await GetPageVersion(pageId);
+        var oldBody = await GetPage(pageId);
+        if (content == oldBody?.body.storage.value.Replace("&quot;", "\""))
+        {
+            Console.WriteLine("No updates for page: " + title);
+            return;
+        }
+        
+        Console.WriteLine("Update page: " + title);
+        var currentVersion = oldBody!.version.number;
         
         var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}";
 
@@ -97,7 +106,7 @@ public class ConfluenceService
 
         var json = await responseString.Content.ReadAsStringAsync();
         var response = JsonSerializer.Deserialize<NewPageResponse>(json);
-        return response!.id;
+        return;
     }
     
     public async Task<int> GetPageVersion(string pageId)
@@ -108,5 +117,15 @@ public class ConfluenceService
         var json = await responseString.Content.ReadAsStringAsync();
         var response = JsonSerializer.Deserialize<PageResponse>(json);
         return response!.version.number;
+    }
+
+    private async Task<PageResponse?> GetPage(string pageId)
+    {
+        var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}?body-format=storage";
+        var responseString = await _httpClient.GetAsync(uri);
+
+        var json = await responseString.Content.ReadAsStringAsync();
+        var response = JsonSerializer.Deserialize<PageResponse>(json);
+        return response;
     }
 }

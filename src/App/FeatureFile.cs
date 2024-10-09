@@ -1,3 +1,3 @@
 namespace App;
 
-public record FeatureFile(string Name, string FullName, string content);
+public record FeatureFile(string Name, string FullName, string Content, ConfluenceDocument Document);

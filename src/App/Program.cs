@@ -36,7 +36,7 @@ internal static class Program
             SpaceKey = opts.SpaceKey,
             PageId = opts.PageId,
             Username = opts.User,
-            Password = opts.Password
+            Password = opts.Token
         });
 
         var tree = new FeatureDirectory("root", "", [], []);
@@ -50,7 +50,16 @@ internal static class Program
 
         var workingDir = tree;
         
-        await Export(workingDir, client, opts.PageId);
+        await Export(workingDir, client, opts.PageId, opts.Reference);
+        
+        var page = await client.GetPage(opts.PageId);
+        if (page != null)
+        {
+            var updateRef = opts.Reference == "" ? "no reference" : opts.Reference;
+            var content = $"<p>last update: {updateRef}</p>";
+            content += client.TableOfContentsMacro;
+            await client.UpdatePage(page.id, page.title, content, opts.Reference);
+        }
     }
 
     private static async Task IndexDirectory(string[] files, DirectoryInfo baseDir, FeatureDirectory tree)
@@ -115,8 +124,8 @@ internal static class Program
         }
     }
 
-    private static async Task Export(FeatureDirectory workingDir, 
-        ConfluenceService confluenceService, string basePage)
+    private static async Task Export(FeatureDirectory workingDir,
+        ConfluenceService confluenceService, string basePage, string comment)
     {
         var subPages = await confluenceService.GetChildren(basePage);
         
@@ -127,7 +136,7 @@ internal static class Program
                 var page = subPages!.results.First(p => p.title == document.Title);
                 if (document.Publish)
                 {
-                    await confluenceService.UpdatePage(page.id, document.Title, document.Content);
+                    await confluenceService.UpdatePage(page.id, document.Title, document.Content, comment);
                 }
                 else
                 {
@@ -172,7 +181,7 @@ internal static class Program
 
             if (directory.Files.Any(f => f.Document.Publish) || directory.Directories.Any())
             {
-                await Export(directory, confluenceService, pageId);
+                await Export(directory, confluenceService, pageId, comment);
             }
         }
     }

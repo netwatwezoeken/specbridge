@@ -54,15 +54,7 @@ public class ConfluenceService
     {
         Console.WriteLine("Create page: " + title);
         if(string.IsNullOrEmpty(content))
-            content = """
-                      <ac:structured-macro ac:name="children" ac:schema-version="2" data-layout="default" ac:local-id="8c8424f8-cd81-4a71-b5c9-58e87d7493fa" ac:macro-id="dfd91e927d85294353d873bf98912e5ddfc60871ec85741ee457556e18e0d1c5">
-                          <ac:parameter ac:name="all">true</ac:parameter>
-                          <ac:parameter ac:name="depth">0</ac:parameter>
-                          <ac:parameter ac:name="allChildren">true</ac:parameter>
-                          <ac:parameter ac:name="style" /><ac:parameter ac:name="sortAndReverse" />
-                          <ac:parameter ac:name="first">0</ac:parameter>
-                      </ac:structured-macro><p />
-                      """;
+            content = TableOfContentsMacro;
         
         var uri = $"{_serviceConfig.BaseUrl}/wiki/rest/api/content";
 
@@ -80,7 +72,7 @@ public class ConfluenceService
         return response!.id;
     }
 
-    public async Task UpdatePage(string pageId, string title, string content)
+    public async Task UpdatePage(string pageId, string title, string content, string reference)
     {
         var oldBody = await GetPage(pageId);
         if (content == oldBody?.body.storage.value.Replace("&quot;", "\""))
@@ -99,7 +91,7 @@ public class ConfluenceService
             "current",
             title,
             new Body("storage", content),
-            new Version(currentVersion+1, "buildnumber")
+            new Version(currentVersion+1, reference)
         );
 
         var responseString = await _httpClient.PutAsJsonAsync(uri, body);
@@ -119,7 +111,7 @@ public class ConfluenceService
         return response!.version.number;
     }
 
-    private async Task<PageResponse?> GetPage(string pageId)
+    public async Task<PageResponse?> GetPage(string pageId)
     {
         var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}?body-format=storage";
         var responseString = await _httpClient.GetAsync(uri);
@@ -136,4 +128,14 @@ public class ConfluenceService
 
         var responseString = await _httpClient.DeleteAsync(uri);
     }
+    
+    public readonly string TableOfContentsMacro = """
+                                                  <ac:structured-macro ac:name="children" ac:schema-version="2" data-layout="default" ac:local-id="8c8424f8-cd81-4a71-b5c9-58e87d7493fa" ac:macro-id="dfd91e927d85294353d873bf98912e5ddfc60871ec85741ee457556e18e0d1c5">
+                                                      <ac:parameter ac:name="all">true</ac:parameter>
+                                                      <ac:parameter ac:name="depth">0</ac:parameter>
+                                                      <ac:parameter ac:name="allChildren">true</ac:parameter>
+                                                      <ac:parameter ac:name="style" /><ac:parameter ac:name="sortAndReverse" />
+                                                      <ac:parameter ac:name="first">0</ac:parameter>
+                                                  </ac:structured-macro><p />
+                                                  """;
 }

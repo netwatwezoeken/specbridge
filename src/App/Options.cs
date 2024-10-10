@@ -19,12 +19,9 @@ public class Options
     [Option("user", Required = true, HelpText = "username to authenticate with")]
     public required string User { get; set; }
         
-    [Option("password", Required = true, HelpText = "password to authenticate with")]
-    public required string Password { get; set; }
-}
+    [Option("token", Required = true, HelpText = "api token to authenticate with")]
+    public required string Token { get; set; }
 
-public enum Format
-{
-    Json,
-    MermaidMd
+    [Option("reference", Required = false, HelpText = "A reference that is added into comment of a confluence page version")]
+    public string Reference { get; set; } = "";
 }

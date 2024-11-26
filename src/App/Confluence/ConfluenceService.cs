@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace App.Confluence;
 
-public class ConfluenceService
+public class ConfluenceService : IConfluenceService
 {
     private readonly HttpClient _httpClient;
 
@@ -20,16 +20,16 @@ public class ConfluenceService
             "Basic",
             auth);
     }
-
-    public async Task<ChildrenResponse?> GetChildren()
-    {
-        var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{_serviceConfig.PageId}/children";
-
-        var responseString = await _httpClient.GetStringAsync(uri);
-
-        var catalog = JsonSerializer.Deserialize<ChildrenResponse>(responseString);
-        return catalog;
-    }
+    
+    // public async Task<ChildrenResponse?> GetChildren()
+    // {
+    //     var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{_serviceConfig.PageId}/children";
+    //
+    //     var responseString = await _httpClient.GetStringAsync(uri);
+    //
+    //     var catalog = JsonSerializer.Deserialize<ChildrenResponse>(responseString);
+    //     return catalog;
+    // }
     
     public async Task<ChildrenResponse?> GetChildren(string pageId)
     {
@@ -128,14 +128,15 @@ public class ConfluenceService
 
         var responseString = await _httpClient.DeleteAsync(uri);
     }
-    
-    public readonly string TableOfContentsMacro = """
-                                                  <ac:structured-macro ac:name="children" ac:schema-version="2" data-layout="default" ac:local-id="8c8424f8-cd81-4a71-b5c9-58e87d7493fa" ac:macro-id="dfd91e927d85294353d873bf98912e5ddfc60871ec85741ee457556e18e0d1c5">
-                                                      <ac:parameter ac:name="all">true</ac:parameter>
-                                                      <ac:parameter ac:name="depth">0</ac:parameter>
-                                                      <ac:parameter ac:name="allChildren">true</ac:parameter>
-                                                      <ac:parameter ac:name="style" /><ac:parameter ac:name="sortAndReverse" />
-                                                      <ac:parameter ac:name="first">0</ac:parameter>
-                                                  </ac:structured-macro><p />
-                                                  """;
+
+    public string TableOfContentsMacro =>
+        """
+        <ac:structured-macro ac:name="children" ac:schema-version="2" data-layout="default" ac:local-id="8c8424f8-cd81-4a71-b5c9-58e87d7493fa" ac:macro-id="dfd91e927d85294353d873bf98912e5ddfc60871ec85741ee457556e18e0d1c5">
+            <ac:parameter ac:name="all">true</ac:parameter>
+            <ac:parameter ac:name="depth">0</ac:parameter>
+            <ac:parameter ac:name="allChildren">true</ac:parameter>
+            <ac:parameter ac:name="style" /><ac:parameter ac:name="sortAndReverse" />
+            <ac:parameter ac:name="first">0</ac:parameter>
+        </ac:structured-macro><p />
+        """;
 }

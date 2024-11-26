@@ -63,6 +63,12 @@ public class BasicStep
     {
         Assert.True(_confluenceMock.ReceivedUpdatePage(pageId, title));
     }
+
+    [Then(@"feature pageId (.*) named (.*) is recursively deleted")]
+    public void ThenPageIsRecursivelyDeleted(string pageId, string title)
+    {
+        Assert.True(_confluenceMock.ReceivedDeletePage(pageId, title, true));
+    }
     
     [Then(@"feature pageId (.*) named (.*) is deleted")]
     public void ThenFeaturePageIsDeleted(string pageId, string title)

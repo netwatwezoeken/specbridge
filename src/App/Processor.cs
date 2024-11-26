@@ -101,6 +101,8 @@ public static class Processor
     {
         var subPages = await confluenceService.GetChildren(basePage);
         
+        await DeleteFeaturesThatDoNotExistOnDisk(workingDir, confluenceService, subPages);
+        
         foreach (var document in workingDir.Files.Select(file => file.Document))
         {
             if (subPages!.results.Any(p => p.title == document.Title))
@@ -134,10 +136,6 @@ public static class Processor
             if (subPages!.results.Any(p => p.title == directory.FullName))
             {
                 pageId = subPages!.results.First(p => p.title == directory.FullName).id;
-                if (!directory.Files.Any(f => f.Document.Publish))
-                {
-                    await confluenceService.DeletePage(pageId, directory.FullName, true);
-                }
             }
             else
             {
@@ -154,6 +152,19 @@ public static class Processor
             if (directory.Files.Any(f => f.Document.Publish) || directory.Directories.Any())
             {
                 await Export(directory, confluenceService, pageId, comment);
+            }
+        }
+    }
+    
+    private static async Task DeleteFeaturesThatDoNotExistOnDisk(FeatureDirectory workingDir,
+        IConfluenceService confluenceService, ChildrenResponse? subPages)
+    {
+        foreach (var page in subPages!.results)
+        {
+            if (!workingDir.Files.Select(file => file.Document.Title).Contains(page.title)
+                && !workingDir.Directories.Select(file => file.Name).Contains(page.title))
+            {
+                await confluenceService.DeletePage(page.id, page.title, true);
             }
         }
     }

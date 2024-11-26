@@ -20,3 +20,26 @@ Scenario: Update existing feature
 	And specification directory ../../../../Tests/Base
 	When syncing to mainpage
 	Then feature pageId 2 named Showing basic gherkin syntax is updated
+	
+Scenario: Delete existing feature
+	Given these pages exist
+	  | PageId   | ParentPageId | Title                        | Content |
+	  | mainpage | null         | Main page                    | ""      |
+	  | 1        | mainpage     | 00BasicGherkin               | ""      |
+	  | 2        | 1            | Showing basic gherkin syntax | ""      |
+	  | 3        | 1            | Feature not exist on disk    | ""      |
+	And specification directory ../../../../Tests/Base
+	When syncing to mainpage
+	Then feature pageId 3 named Feature not exist on disk is recursively deleted
+
+Scenario: Delete existing folder
+	Given these pages exist
+	  | PageId   | ParentPageId | Title                        | Content |
+	  | mainpage | null         | Main page                    | ""      |
+	  | 1        | mainpage     | 00BasicGherkin               | ""      |
+	  | 2        | 1            | Showing basic gherkin syntax | ""      |
+	  | 3        | mainpage     | Folder not on disk           | ""      |
+	  | 4        | 3            | Does not exist on disk       | ""      |
+	And specification directory ../../../../Tests/Base
+	When syncing to mainpage
+	Then feature pageId 3 named Folder not on disk is recursively deleted

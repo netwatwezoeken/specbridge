@@ -52,7 +52,7 @@ public class ClientMock : IConfluenceService
         return Task.CompletedTask;
     }
 
-    public bool ReceivedUpdatePage(string pageId, string title, string content = null, string reference = null)
+    public bool ReceivedUpdatePage(string pageId, string title)
     {
         return _updates.Any(u => u.Item1 == pageId && u.Item2 == title);
     }

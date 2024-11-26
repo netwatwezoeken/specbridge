@@ -39,16 +39,14 @@ public class BasicStep
     [Then(@"a directory page named (.*) should be created under (.*)")]
     public void ThenADirectoryPageWithNameShouldBeCreated(string title, string parentId)
     {
-        Assert.True(_confluenceMock.Pages.Any(
-            p => p.Title == title && p.ParentPageId == parentId && p.Content == string.Empty));
+        Assert.Contains(_confluenceMock.Pages, p => p.Title == title && p.ParentPageId == parentId && p.Content == string.Empty);
     }
     
     [Then(@"a feature page named (.*) should be created under (.*)")]
     public void ThenAFeaturePageWithNameShouldBeCreated(string title, string parentTitle)
     {
         var parent = _confluenceMock.Pages.First(p => p.Title == parentTitle);
-        Assert.True(_confluenceMock.Pages.Any(
-            p => p.Title == title && p.ParentPageId == parent.PageId));
+        Assert.Contains(_confluenceMock.Pages, p => p.Title == title && p.ParentPageId == parent.PageId);
     }
 
     [Given(@"these pages exist")]

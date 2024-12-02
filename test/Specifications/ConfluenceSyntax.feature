@@ -3,9 +3,40 @@
 Scenario: Basic scenario
 	Given feature file ../../../../Tests/Parsing/BasicScenario.feature
 	When Parsed
-	Then result matches snapshot
+	Then feature title is Showing basic gherkin syntax
+    Then result contains scenario title <h3>Using And and But</h3>
+	And result contains a Code Block with these entries
+	  | Line                                                   |
+	  | Given the initial state of the application is Running  |
+	  | And I have authorization to ask application state      |
+	  | When I ask what the application state is               |
+	  | Then I should see Running as the answer                |
+	  | And I should see the time of the application           |
+	  | But the state of the application should not be Stopped |
 
 Scenario: Scenario outline
 	Given feature file ../../../../Tests/Parsing/ScenarioOutline.feature
 	When Parsed
-	Then result matches snapshot
+    Then result contains a html table with
+      | number 1 | number 2 | result |
+      | 10       | 20       | 30     |
+      | 20       | 20       | 40     |
+      | 20       | 30       | 50     |
+	And result contains a html table with
+      | number 1 | number 2 | result |
+      | 100      | 20       | 120    |
+      | 1000     | 20       | 1020   |
+	And result contains a html table with
+	  | number 1 | number 2 | result |
+	  | 10       | 20       | 30     |
+	  | 20       | 20       | 40     |
+	  | 20       | 30       | 50     |
+	And result contains a html table with
+	  | number 1 | number 2 | result |
+	  | 100      | 20       | 120    |
+	  | 1000     | 20       | 1020   |
+
+Scenario: Rule
+	Given feature file ../../../../Tests/Parsing/FeatureWithRule.feature
+	When Parsed
+	Then result contains a Info Panel with Rule: Add should calculate the sum of the entered numbers

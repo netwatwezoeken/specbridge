@@ -1,4 +1,4 @@
-﻿Feature: No Publish Tag
+﻿Feature: Skip publishing certain features
 	Any feature that is tagged with @no_publish is not published or removed if already present.
 
 Scenario: Skip feature that is tagged

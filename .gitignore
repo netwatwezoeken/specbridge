@@ -400,3 +400,4 @@ FodyWeavers.xsd
 .DS_Store
 confluence.http
 *feature.cs
+test/Specifications/**.received.html

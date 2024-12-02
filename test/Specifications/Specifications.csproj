@@ -13,6 +13,8 @@
         <PackageReference Include="NSubstitute" />
         <PackageReference Include="Reqnroll.xUnit" />
         <PackageReference Include="System.Text.Json" />
+        <PackageReference Include="Verify.AngleSharp" />
+        <PackageReference Include="Verify.Xunit" />
         <PackageReference Include="xunit" />
         <PackageReference Include="xunit.runner.visualstudio"/>
     </ItemGroup>
@@ -22,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="ConfluenceSyntax.feature" />
       <Content Include="ReplicateFolderSturcture.feature" />
       <Content Include="NoPublishTag.feature" />
     </ItemGroup>
@@ -37,6 +40,21 @@
         <DesignTime>true</DesignTime>
         <Visible>true</Visible>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Validation">
+        <HintPath>bin\Debug\net9.0\Validation.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="DisplayOnConfluenceFeature.BasicScenario.verified.html">
+        <DependentUpon>ConfluenceSyntax.feature</DependentUpon>
+      </None>
+      <None Update="ConfluenceGenerationFeature.BasicScenario.DotNet9_0.received.html">
+        <DependentUpon>ConfluenceSyntax.feature</DependentUpon>
+      </None>
     </ItemGroup>
 
 </Project>

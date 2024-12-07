@@ -40,3 +40,12 @@ Scenario: Rule
 	Given feature file ../../../../Tests/Parsing/FeatureWithRule.feature
 	When Parsed
 	Then result contains a Info Panel with Rule: Add should calculate the sum of the entered numbers
+
+Scenario: Scenario data tables
+	Given feature file ../../../../Tests/Parsing/DataTables.feature
+	When Parsed
+	Then result contains a html table with
+	  | Name   | Style | Birth date | Cred |
+	  | Marcus | Cool  | 1972-10-09 | 50   |
+	  | Anders | Butch | 1977-01-01 | 500  |
+	  | Jocke  | Soft  | 1974-04-04 | 1000 |

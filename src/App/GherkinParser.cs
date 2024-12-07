@@ -70,13 +70,43 @@ public class GherkinParser
     private void RenderScenario(Scenario scenario, StringBuilder builder)
     {
         builder.Append($"<h3>{scenario.Name}</h3>");
-        builder.Append($"<blockquote>");
+
         foreach (var step in scenario.Steps)
         {
+            builder.Append("<blockquote>");
             builder.Append(
                 $"<p><strong><span style=\"color: rgb(101,84,192);\">{step.Keyword}</span></strong> {step.Text.Replace("<", "&lt;").Replace(">", "&gt;")}</p>");
+            builder.Append("</blockquote>");
+            
+            if (step.Argument is DataTable dt)
+            {
+                var firstRow = true;
+                builder.Append(
+                    "<table data-table-width=\"760\" data-layout=\"default\" ac:local-id=\"2c81202d-47d6-4449-be3b-cc6b93b87b27\"><tbody>");
+
+                foreach (var row in dt.Rows)
+                {
+                    builder.Append("<tr>");
+                    if (firstRow)
+                    {
+                        foreach (var cell in row.Cells)
+                        {
+                            builder.Append($"<th><h6>{cell.Value}</h6></th>");
+                        }
+                        firstRow = false;
+                    }
+                    else
+                    {
+                        foreach (var cell in row.Cells)
+                        {
+                            builder.Append($"<td><h6>{cell.Value}</h6></td>");
+                        }
+                    }
+                    builder.Append("</tr>");
+                }
+                builder.Append("</tbody></table>");
+            }
         }
-        builder.Append($"</blockquote>");
 
         if (scenario.Examples.Any())
         {

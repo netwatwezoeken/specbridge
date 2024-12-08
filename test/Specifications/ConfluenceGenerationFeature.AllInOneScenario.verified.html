@@ -1,0 +1,212 @@
+﻿
+<p>In order to see that gherkin is a very simple language</p>
+<p>As a SpecFlow evangelist</p>
+<p>I want to show that basic syntax</p>
+<ac:structured-macro ac:name="tip" ac:schema-version="1" ac:macro-id="3c9c0069-88dd-4a2b-8fee-076564d6faa8">
+  <ac:rich-text-body>
+    <p>Rule: Add should calculate the sum of the entered numbers</p>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h3>Using And and But</h3>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">Given
+      </span>
+    </strong>
+    the initial state of the application is Running</p>
+</blockquote>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">And
+      </span>
+    </strong>
+    I have authorization to ask application state</p>
+</blockquote>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">When
+      </span>
+    </strong>
+    I ask what the application state is</p>
+</blockquote>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">Then
+      </span>
+    </strong>
+    I should see Running as the answer</p>
+</blockquote>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">And
+      </span>
+    </strong>
+    I should see the time of the application</p>
+</blockquote>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">But
+      </span>
+    </strong>
+    the state of the application should not be Stopped</p>
+</blockquote>
+<h3>Using tables</h3>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">Given
+      </span>
+    </strong>
+    I have the following persons</p>
+</blockquote>
+<table data-table-width="760" data-layout="default" ac:local-id="2c81202d-47d6-4449-be3b-cc6b93b87b27">
+  <tbody>
+    <tr>
+      <th>
+        <h6>Name</h6>
+      </th>
+      <th>
+        <h6>Style</h6>
+      </th>
+      <th>
+        <h6>Birth date</h6>
+      </th>
+      <th>
+        <h6>Cred</h6>
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <h6>Marcus</h6>
+      </td>
+      <td>
+        <h6>Cool</h6>
+      </td>
+      <td>
+        <h6>1972-10-09</h6>
+      </td>
+      <td>
+        <h6>50</h6>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h6>Anders</h6>
+      </td>
+      <td>
+        <h6>Butch</h6>
+      </td>
+      <td>
+        <h6>1977-01-01</h6>
+      </td>
+      <td>
+        <h6>500</h6>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h6>Jocke</h6>
+      </td>
+      <td>
+        <h6>Soft</h6>
+      </td>
+      <td>
+        <h6>1974-04-04</h6>
+      </td>
+      <td>
+        <h6>1000</h6>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">When
+      </span>
+    </strong>
+    I search for Jocke</p>
+</blockquote>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">Then
+      </span>
+    </strong>
+    the following person should be returned</p>
+</blockquote>
+<h3>Add two negative numbers with many examples</h3>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">Given
+      </span>
+    </strong>
+    I enter &lt;number 1&gt; into the calculator</p>
+</blockquote>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">And
+      </span>
+    </strong>
+    I enter &lt;number 2&gt; into the calculator</p>
+</blockquote>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">When
+      </span>
+    </strong>
+    I perform add</p>
+</blockquote>
+<blockquote>
+  <p>
+    <strong>
+      <span style="color: rgb(101,84,192);">Then
+      </span>
+    </strong>
+    the result should be &lt;result&gt;</p>
+</blockquote>
+<table data-table-width="760" data-layout="default" ac:local-id="2c81202d-47d6-4449-be3b-cc6b93b87b27">
+  <tbody>
+    <tr>
+      <th>
+        <p>
+          <strong>number 1</strong>
+        </p>
+      </th>
+      <th>
+        <p>
+          <strong>number 2</strong>
+        </p>
+      </th>
+      <th>
+        <p>
+          <strong>result</strong>
+        </p>
+      </th>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>20</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>20</td>
+      <td>40</td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>30</td>
+      <td>50</td>
+    </tr>
+  </tbody>
+</table>

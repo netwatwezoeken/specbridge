@@ -14,6 +14,8 @@
         <PackageReference Include="NSubstitute" />
         <PackageReference Include="Reqnroll.xUnit" />
         <PackageReference Include="System.Text.Json" />
+        <PackageReference Include="Verify.AngleSharp" />
+        <PackageReference Include="Verify.Xunit" />
         <PackageReference Include="xunit" />
         <PackageReference Include="xunit.runner.visualstudio"/>
     </ItemGroup>
@@ -48,10 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="DisplayOnConfluenceFeature.BasicScenario.verified.html">
-        <DependentUpon>ConfluenceSyntax.feature</DependentUpon>
-      </None>
-      <None Update="ConfluenceGenerationFeature.BasicScenario.DotNet9_0.received.html">
+      <None Update="ConfluenceGenerationFeature.AllInOneScenario.verified.html">
         <DependentUpon>ConfluenceSyntax.feature</DependentUpon>
       </None>
     </ItemGroup>

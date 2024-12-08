@@ -49,3 +49,8 @@ Scenario: Scenario data tables
 	  | Marcus | Cool  | 1972-10-09 | 50   |
 	  | Anders | Butch | 1977-01-01 | 500  |
 	  | Jocke  | Soft  | 1974-04-04 | 1000 |
+
+Scenario: All in one scenario
+	Given feature file ../../../../Tests/Parsing/AllInOne.feature
+	When Parsed
+	Then result should match the reference

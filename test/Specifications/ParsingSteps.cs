@@ -2,6 +2,7 @@ using AngleSharp;
 using AngleSharp.Dom;
 using App;
 using Reqnroll;
+using VerifyTests.AngleSharp;
 
 namespace Specifications;
 
@@ -16,6 +17,10 @@ public class ParsingSteps
     {
         var config = Configuration.Default.WithDefaultLoader();
         _htmlContext = BrowsingContext.New(config);
+        if (!VerifyAngleSharpDiffing.Initialized)
+        {
+            VerifyAngleSharpDiffing.Initialize();
+        }
     }
 
     [When(@"Parsed")]
@@ -117,6 +122,12 @@ public class ParsingSteps
         }
         
         return dataTable.Rows.Count == list.Count -1;
+    }
+
+    [Then(@"result should match the reference")]
+    public Task ThenResultShouldMatchTheReference()
+    {
+        return Verify(_document.Content, "html").PrettyPrintHtml();
     }
 }
 

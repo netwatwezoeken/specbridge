@@ -54,3 +54,17 @@ Scenario: All in one scenario
 	Given feature file ../../../../Tests/Parsing/AllInOne.feature
 	When Parsed
 	Then result should match the reference
+
+Scenario: Background
+	Given feature file ../../../../Tests/Parsing/Background.feature
+	When Parsed
+	Then feature title is Background test
+	And result contains a Code Block with these entries
+	  | Line                                                                 |
+	  | Given a something that should happen before each scenario with table |
+	  | When parsed                                                          |
+	  | Then background should be rendered                                   |
+	Then result contains a html table with
+	  | Name        | Style | Birth date | Cred |
+	  | Background  | Cool  | 1972-10-09 | 50   |
+	  | Achtergrond | Butch | 1977-01-01 | 500  |

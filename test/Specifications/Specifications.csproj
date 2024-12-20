@@ -49,10 +49,4 @@
       </Reference>
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="ConfluenceGenerationFeature.AllInOneScenario.verified.html">
-        <DependentUpon>ConfluenceSyntax.feature</DependentUpon>
-      </None>
-    </ItemGroup>
-
 </Project>

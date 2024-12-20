@@ -1,7 +1,13 @@
-﻿Feature: Showing basic gherkin syntax
+﻿Feature: All in one
 	In order to see that gherkin is a very simple language  
 	As a SpecFlow evangelist  
 	I want to show that basic syntax
+
+Background:
+	Given a global administrator named "Greg"
+	And a blog named "Greg's anti-tax rants"
+	And a customer named "Dr. Bill"
+	And a blog named "Expensive Therapy" owned by "Dr. Bill"
 
 Rule: Add should calculate the sum of the entered numbers
 

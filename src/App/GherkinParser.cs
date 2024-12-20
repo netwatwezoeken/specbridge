@@ -45,10 +45,19 @@ public class GherkinParser
                 case Rule rule:
                     RenderRule(rule, contentbuilder);
                     break;
+                case Background background:
+                    RenderBackground(background, contentbuilder);
+                    break;
             }
         }
         
         return new ConfluenceDocument(specifications.Feature.Name, contentbuilder.ToString(), publish);
+    }
+
+    private void RenderBackground(Background background, StringBuilder builder)
+    {
+        builder.Append($"<h3>Background {background.Name}</h3>");
+        RenderStepsContainer(background, builder);
     }
 
     private void RenderRule(Rule rule, StringBuilder builder)
@@ -70,8 +79,41 @@ public class GherkinParser
     private void RenderScenario(Scenario scenario, StringBuilder builder)
     {
         builder.Append($"<h3>{scenario.Name}</h3>");
+        RenderStepsContainer(scenario, builder);
 
-        foreach (var step in scenario.Steps)
+        if (scenario.Examples.Any())
+        {
+            foreach (var example in scenario.Examples)
+            {
+                builder.Append(
+                    "<table data-table-width=\"760\" data-layout=\"default\" ac:local-id=\"2c81202d-47d6-4449-be3b-cc6b93b87b27\"><tbody>");
+                builder.Append("<tr>");
+                foreach (var cell in example.TableHeader.Cells)
+                {
+                    builder.Append($"<th><p><strong>{cell.Value}</strong></p></th>");
+                }
+
+                builder.Append("</tr>");
+                
+                foreach (var row in example.TableBody)
+                {
+                    builder.Append("<tr>");
+                    foreach (var cell in row.Cells)
+                    {
+                        builder.Append($"<td>{cell.Value}</td>");
+                    }
+                    
+                    builder.Append("</tr>");
+                }
+
+                builder.Append("</tbody></table>");
+            }
+        }
+    }
+
+    private static void RenderStepsContainer(StepsContainer stepsContainer, StringBuilder builder)
+    {
+        foreach (var step in stepsContainer.Steps)
         {
             builder.Append("<blockquote>");
             builder.Append(
@@ -104,35 +146,6 @@ public class GherkinParser
                     }
                     builder.Append("</tr>");
                 }
-                builder.Append("</tbody></table>");
-            }
-        }
-
-        if (scenario.Examples.Any())
-        {
-            foreach (var example in scenario.Examples)
-            {
-                builder.Append(
-                    "<table data-table-width=\"760\" data-layout=\"default\" ac:local-id=\"2c81202d-47d6-4449-be3b-cc6b93b87b27\"><tbody>");
-                builder.Append("<tr>");
-                foreach (var cell in example.TableHeader.Cells)
-                {
-                    builder.Append($"<th><p><strong>{cell.Value}</strong></p></th>");
-                }
-
-                builder.Append("</tr>");
-                
-                foreach (var row in example.TableBody)
-                {
-                    builder.Append("<tr>");
-                    foreach (var cell in row.Cells)
-                    {
-                        builder.Append($"<td>{cell.Value}</td>");
-                    }
-                    
-                    builder.Append("</tr>");
-                }
-
                 builder.Append("</tbody></table>");
             }
         }

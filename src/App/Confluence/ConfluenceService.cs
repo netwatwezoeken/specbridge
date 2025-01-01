@@ -21,16 +21,6 @@ public class ConfluenceService : IConfluenceService
             auth);
     }
     
-    // public async Task<ChildrenResponse?> GetChildren()
-    // {
-    //     var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{_serviceConfig.PageId}/children";
-    //
-    //     var responseString = await _httpClient.GetStringAsync(uri);
-    //
-    //     var catalog = JsonSerializer.Deserialize<ChildrenResponse>(responseString);
-    //     return catalog;
-    // }
-    
     public async Task<ChildrenResponse?> GetChildren(string pageId)
     {
         var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}/children";

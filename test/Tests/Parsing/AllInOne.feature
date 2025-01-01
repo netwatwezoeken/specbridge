@@ -3,13 +3,13 @@
 	As a SpecFlow evangelist  
 	I want to show that basic syntax
 
+Rule: Add should calculate the sum of the entered numbers
+
 Background:
 	Given a global administrator named "Greg"
 	And a blog named "Greg's anti-tax rants"
 	And a customer named "Dr. Bill"
 	And a blog named "Expensive Therapy" owned by "Dr. Bill"
-
-Rule: Add should calculate the sum of the entered numbers
 
 Scenario: Using And and But
 	Given the initial state of the application is Running

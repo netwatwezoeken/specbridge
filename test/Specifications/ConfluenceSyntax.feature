@@ -59,7 +59,7 @@ Scenario: Background
 	Given feature file ../../../../Tests/Parsing/Background.feature
 	When Parsed
 	Then feature title is Background test
-	And result contains a Code Block with these entries
+	And result contains a collapsable Code Block with these entries
 	  | Line                                                                 |
 	  | Given a something that should happen before each scenario with table |
 	  | When parsed                                                          |

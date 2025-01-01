@@ -57,7 +57,9 @@ public class GherkinParser
     private void RenderBackground(Background background, StringBuilder builder)
     {
         builder.Append($"<h3>Background {background.Name}</h3>");
+        builder.Append("<ac:structured-macro ac:name=\"expand\" ac:schema-version=\"1\" ac:macro-id=\"760165ed-f669-4a15-9cf3-fc0b5aee9884\"><ac:parameter ac:name=\"title\">Steps that are applied before each scenario</ac:parameter><ac:rich-text-body>");
         RenderStepsContainer(background, builder);
+        builder.Append("</ac:rich-text-body></ac:structured-macro>");
     }
 
     private void RenderRule(Rule rule, StringBuilder builder)
@@ -71,6 +73,9 @@ public class GherkinParser
             {
                 case Scenario scenario:
                     RenderScenario(scenario, builder);
+                    break;
+                case Background background:
+                    RenderBackground(background, builder);
                     break;
             }
         }

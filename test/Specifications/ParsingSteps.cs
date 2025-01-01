@@ -59,6 +59,15 @@ public class ParsingSteps
         Assert.Contains(text, _document.Content);
     }
     
+    [Then(@"result contains a collapsable Code Block with these entries")]
+    public async Task ThenResultContainsACollapsableCodeBlockWithArray(DataTable table)
+    {
+        var entries = table.CreateSet<Entry>().ToList();
+        var document = await _htmlContext.OpenAsync(req => req.Content(_document.Content));
+        var actualList = document.QuerySelectorAll("ac\\:structured-macro ac\\:rich-text-body > blockquote > p").Select(p => p.Text().Replace("  ", " ")).ToList();
+        Assert.Equal(entries.Select(e => e.Line).ToList(), actualList);
+    }
+    
     [Then(@"result contains a Code Block with these entries")]
     public async Task ThenResultContainsACodeBlockWithArray(DataTable table)
     {

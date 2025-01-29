@@ -100,8 +100,11 @@ public static class Processor
         IConfluenceService confluenceService, string basePage, string comment)
     {
         var subPages = await confluenceService.GetChildren(basePage);
-        
-        await DeleteFeaturesThatDoNotExistOnDisk(workingDir, confluenceService, subPages);
+
+        if (subPages is not null)
+        {
+            await DeleteFeaturesThatDoNotExistOnDisk(workingDir, confluenceService, subPages);
+        }
         
         foreach (var document in workingDir.Files.Select(file => file.Document))
         {
@@ -157,9 +160,9 @@ public static class Processor
     }
     
     private static async Task DeleteFeaturesThatDoNotExistOnDisk(FeatureDirectory workingDir,
-        IConfluenceService confluenceService, ChildrenResponse? subPages)
+        IConfluenceService confluenceService, ChildrenResponse subPages)
     {
-        foreach (var page in subPages!.results)
+        foreach (var page in subPages.results)
         {
             if (!workingDir.Files.Select(file => file.Document.Title).Contains(page.title)
                 && !workingDir.Directories.Select(file => file.Name).Contains(page.title))

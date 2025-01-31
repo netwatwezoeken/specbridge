@@ -101,14 +101,11 @@ public static class Processor
     {
         var subPages = await confluenceService.GetChildren(basePage);
 
-        if (subPages is not null)
-        {
-            await DeleteFeaturesThatDoNotExistOnDisk(workingDir, confluenceService, subPages);
-        }
+        await DeleteFeaturesThatDoNotExistOnDisk(workingDir, confluenceService, subPages);
         
         foreach (var document in workingDir.Files.Select(file => file.Document))
         {
-            if (subPages!.results.Any(p => p.title == document.Title))
+            if (subPages.results.Any(p => p.title == document.Title))
             {
                 var page = subPages!.results.First(p => p.title == document.Title);
                 if (document.Publish)
@@ -136,9 +133,9 @@ public static class Processor
         foreach (var directory in workingDir.Directories)
         {
             var pageId = "";
-            if (subPages!.results.Any(p => p.title == directory.FullName))
+            if (subPages.results.Any(p => p.title == directory.FullName))
             {
-                pageId = subPages!.results.First(p => p.title == directory.FullName).id;
+                pageId = subPages.results.First(p => p.title == directory.FullName).id;
             }
             else
             {

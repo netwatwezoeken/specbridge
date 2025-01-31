@@ -19,11 +19,11 @@ public class ClientMock : IConfluenceService
         Pages = pages.ToList();
     }
     
-    public Task<ChildrenResponse?> GetChildren(string pageId)
+    public Task<ChildrenResponse> GetChildren(string pageId)
     {
         var children = Pages
             .Where(p => p.ParentPageId == pageId);
-        return Task.FromResult<ChildrenResponse?>(
+        return Task.FromResult<ChildrenResponse>(
             new ChildrenResponse(children
                 .Select(p => new Results(p.PageId, "", p.Title, "", 1))
                 .ToArray())

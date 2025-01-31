@@ -21,7 +21,7 @@ public class ConfluenceService : IConfluenceService
             auth);
     }
     
-    public async Task<ChildrenResponse?> GetChildren(string pageId)
+    public async Task<ChildrenResponse> GetChildren(string pageId)
     {
         var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}/children";
 
@@ -31,7 +31,8 @@ public class ConfluenceService : IConfluenceService
 
             var json = await responseString.Content.ReadAsStringAsync();
             var catalog = JsonSerializer.Deserialize<ChildrenResponse>(json);
-            return catalog;
+            return catalog ?? 
+                   new ChildrenResponse(new List<Results>().ToArray());
         }
         catch
         {

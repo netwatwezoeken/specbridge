@@ -39,7 +39,14 @@ internal static class Program
             Password = opts.Token
         });
 
-        await Processor.DoIt(opts, client);
+        try
+        {
+            await Processor.DoIt(opts, client);
+        }
+        catch(ConfluenceServiceException e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
 
     private static void HandleParseError(IEnumerable<JSType.Error> errs)

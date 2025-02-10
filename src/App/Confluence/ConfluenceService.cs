@@ -56,11 +56,22 @@ public class ConfluenceService : IConfluenceService
             title,
             "page");
 
-        var responseString = await _httpClient.PostAsJsonAsync(uri, body);
+        var response = await _httpClient.PostAsJsonAsync(uri, body);
 
-        var json = await responseString.Content.ReadAsStringAsync();
-        var response = JsonSerializer.Deserialize<NewPageResponse>(json);
-        return response!.id;
+        var json = await response.Content.ReadAsStringAsync();
+        var parsedResponse = JsonSerializer.Deserialize<NewPageResponse>(json);
+
+        if (!response.IsSuccessStatusCode || parsedResponse?.id == null)
+        {
+            var badRequest = JsonSerializer.Deserialize<BadRequest>(json);
+            if (badRequest != null)
+            {
+                throw new ConfluenceServiceException($"ERROR: Page with title '{title}' could not be created. " +
+                                                     string.Join(null, badRequest.message.Split("BadRequestException: ").Skip(1)));
+            }
+            throw new ConfluenceServiceException(json);
+        }
+        return parsedResponse.id;
     }
 
     public async Task UpdatePage(string pageId, string title, string content, string reference)
@@ -114,10 +125,19 @@ public class ConfluenceService : IConfluenceService
 
     public async Task DeletePage(string pageId, string name, bool recursive = false)
     {
+        
+        var uri1 = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}?body-format=storage";
+        var responseString1 = await _httpClient.GetAsync(uri1);
+        
         Console.WriteLine("Delete: " + name);
         var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}";
 
-        var responseString = await _httpClient.DeleteAsync(uri);
+        var response = await _httpClient.DeleteAsync(uri);
+        if (!response.IsSuccessStatusCode)
+        {
+            // throw new ConfluenceServiceException(
+            //     $"ERROR: Page {pageId} with title '{name}' could not be deleted. Does the confluence user have sufficient rights?");
+        }
     }
 
     public string TableOfContentsMacro =>

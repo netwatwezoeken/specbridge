@@ -24,4 +24,7 @@ public class Options
 
     [Option("reference", Required = false, HelpText = "A reference that is added into comment of a confluence page version")]
     public string Reference { get; set; } = "";
+
+    [Option("childlimit", Required = false, HelpText = "The limit of the number of children to retrieve when retrieving children from Confluence. Default is 25.")]
+    public int ChildLimit { get; set; } = 25;
 }

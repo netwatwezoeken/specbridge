@@ -36,7 +36,8 @@ internal static class Program
             SpaceKey = opts.SpaceKey,
             PageId = opts.PageId,
             Username = opts.User,
-            Password = opts.Token
+            Password = opts.Token,
+            ChildLimit = opts.ChildLimit
         });
 
         try

@@ -23,7 +23,7 @@ public class ConfluenceService : IConfluenceService
     
     public async Task<ChildrenResponse> GetChildren(string pageId)
     {
-        var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}/children";
+        var uri = $"{_serviceConfig.BaseUrl}/wiki/api/v2/pages/{pageId}/children?limit={Math.Max(1, _serviceConfig.ChildLimit)}";
 
         try
         {
